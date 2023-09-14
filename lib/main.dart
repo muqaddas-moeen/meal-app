@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meal_app/widgets/main_categories.dart';
+import 'package:meal_app/screen/main_categories.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Categories(),
+      home: const MainCategories(),
     );
   }
 }
