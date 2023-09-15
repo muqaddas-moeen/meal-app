@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meal_app/models/meal.dart';
+import 'package:meal_app/screen/meal_receipe.dart';
 
 class MealOfCategoryContainer extends StatelessWidget {
   MealOfCategoryContainer({super.key, required this.meal});
@@ -7,25 +8,40 @@ class MealOfCategoryContainer extends StatelessWidget {
   Meal meal;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-          child: Image(
-            image: AssetImage('assets/images/italian.jpg'),
-            height: 200,
-            width: 320,
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    MealReceipe(title: meal.title, id: meal.id)));
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
+        width: 300,
+        height: 240,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(meal.imageUrl),
+            //opacity: 1.7,
+            fit: BoxFit.cover,
           ),
+          shape: BoxShape.rectangle,
+          color: Colors.black,
+          boxShadow: [
+            BoxShadow(
+                color: Color.fromARGB(255, 112, 8, 8).withOpacity(0.3),
+                offset: const Offset(0, 20),
+                blurRadius: 5,
+                spreadRadius: -10)
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 100),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 160.0),
           child: Container(
-            height: 100,
-            width: 320,
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 75, 66, 66),
-                backgroundBlendMode: BlendMode.lighten),
+            color: Colors.black54,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
@@ -34,7 +50,8 @@ class MealOfCategoryContainer extends StatelessWidget {
                     children: [
                       Text(
                         meal.title,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
@@ -47,24 +64,39 @@ class MealOfCategoryContainer extends StatelessWidget {
                         Icons.alarm,
                         color: Colors.white,
                       ),
+                      const SizedBox(
+                        width: 6,
+                      ),
                       Text(
                         meal.duration.toString(),
                         style: const TextStyle(color: Colors.white),
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       const Icon(
-                        Icons.work,
+                        Icons.work_outline_outlined,
                         color: Colors.white,
                       ),
+                      const SizedBox(
+                        width: 6,
+                      ),
                       Text(
-                        meal.complexity.toString(),
+                        meal.complexity.name,
                         style: const TextStyle(color: Colors.white),
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       const Icon(
-                        Icons.currency_exchange,
+                        Icons.attach_money_outlined,
                         color: Colors.white,
                       ),
+                      const SizedBox(
+                        width: 6,
+                      ),
                       Text(
-                        meal.affordability.toString(),
+                        meal.affordability.name,
                         style: const TextStyle(color: Colors.white),
                       ),
                     ],
@@ -74,7 +106,7 @@ class MealOfCategoryContainer extends StatelessWidget {
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

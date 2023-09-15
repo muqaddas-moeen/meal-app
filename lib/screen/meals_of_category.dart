@@ -25,9 +25,23 @@ class _MealsOfCategoryState extends State<MealsOfCategory> {
             icon: const Icon(Icons.arrow_back_ios)),
         title: Text(widget.title),
       ),
-      body: Text('data'),
-
-      //dummyMeals.map((meal) => MealOfCategoryContainer(meal: meal)).where((widget.id) => ),
+      body: ListView(
+        children: [
+          if (dummyMeals.isNotEmpty)
+            for (final meal in dummyMeals)
+              for (final id in meal.categories)
+                if (id == widget.id)
+                  MealOfCategoryContainer(meal: meal)
+                else if (dummyMeals.isEmpty)
+                  const Center(
+                    child: Text(
+                      'Oh nothing is there!',
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                  )
+        ],
+      ),
     );
   }
 }
