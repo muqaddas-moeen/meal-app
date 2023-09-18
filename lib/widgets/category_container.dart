@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:meal_app/models/category.dart';
-import 'package:meal_app/models/meal.dart';
+
 import 'package:meal_app/screen/meals_of_category.dart';
-import 'package:meal_app/widgets/meal_of_category_container.dart';
 
 class CategoryContainer extends StatelessWidget {
   CategoryContainer({super.key, required this.category, this.id});

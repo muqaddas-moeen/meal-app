@@ -6,6 +6,17 @@ class MealOfCategoryContainer extends StatelessWidget {
   MealOfCategoryContainer({super.key, required this.meal});
 
   Meal meal;
+
+  String get complexityText {
+    return meal.complexity.name[0].toUpperCase() +
+        meal.complexity.name.substring(1);
+  }
+
+  String get affordabilityText {
+    return meal.affordability.name[0].toUpperCase() +
+        meal.affordability.name.substring(1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -17,7 +28,7 @@ class MealOfCategoryContainer extends StatelessWidget {
                     MealReceipe(title: meal.title, id: meal.id)));
       },
       child: Container(
-        margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
+        margin: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
         width: 300,
         height: 240,
         decoration: BoxDecoration(
@@ -30,7 +41,7 @@ class MealOfCategoryContainer extends StatelessWidget {
           color: Colors.black,
           boxShadow: [
             BoxShadow(
-                color: Color.fromARGB(255, 112, 8, 8).withOpacity(0.3),
+                color: const Color.fromARGB(255, 112, 8, 8).withOpacity(0.3),
                 offset: const Offset(0, 20),
                 blurRadius: 5,
                 spreadRadius: -10)
@@ -50,6 +61,10 @@ class MealOfCategoryContainer extends StatelessWidget {
                     children: [
                       Text(
                         meal.title,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       )
@@ -68,7 +83,7 @@ class MealOfCategoryContainer extends StatelessWidget {
                         width: 6,
                       ),
                       Text(
-                        meal.duration.toString(),
+                        '${meal.duration} min',
                         style: const TextStyle(color: Colors.white),
                       ),
                       const SizedBox(
@@ -82,7 +97,7 @@ class MealOfCategoryContainer extends StatelessWidget {
                         width: 6,
                       ),
                       Text(
-                        meal.complexity.name,
+                        complexityText,
                         style: const TextStyle(color: Colors.white),
                       ),
                       const SizedBox(
@@ -96,7 +111,7 @@ class MealOfCategoryContainer extends StatelessWidget {
                         width: 6,
                       ),
                       Text(
-                        meal.affordability.name,
+                        affordabilityText,
                         style: const TextStyle(color: Colors.white),
                       ),
                     ],
