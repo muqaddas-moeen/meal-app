@@ -5,6 +5,14 @@ import 'package:meal_app/screen/main_categories.dart';
 import 'package:meal_app/data/dummy_data.dart';
 import 'package:meal_app/screen/meals_of_category.dart';
 import 'package:meal_app/screen/meal_receipe.dart';
+import 'package:meal_app/widgets/drawer.dart';
+
+const kInitialFilters = {
+  Filter.glutenFree: false,
+  Filter.lactoseFree: false,
+  Filter.veganFree: false,
+  Filter.vegatarianFree: false
+};
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -16,6 +24,7 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
   final List<Meal> _favouriteMeals = [];
+  Map<Filter, bool> _selectedFilters = kInitialFilters;
 
   void _selectPage(int index) {
     setState(() {
@@ -23,55 +32,40 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-// Filtered Meals Setting
-    bool _toggleState = false;
-    String _switchCase = '';
-    bool isSwitched = false;
+  void _setScreen(String identifier) async {
+    Navigator.of(context).pop();
 
-    void _attemptChange(bool newState) {
+    if (identifier == 'filters') {
       setState(() {
-        _toggleState = newState;
-        newState ? _switchCase = 'ON' : _switchCase = 'OFF';
+        Map<Filter, bool> result = {
+          Filter.glutenFree: kGlutenFree,
+          Filter.lactoseFree: kLactoseFree,
+          Filter.veganFree: kVeganFree,
+          Filter.vegatarianFree: kVegatarianFree
+        };
+
+        _selectedFilters = result ?? kInitialFilters;
       });
     }
+  }
 
-    Future<void> showFilterDialogBox() async {
-      return showDialog(
-          context: context,
-          builder: ((context) => AlertDialog(
-                title: const Text(
-                  'Apply filter on meals',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SwitchListTile(
-                        title: Text("title"),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        contentPadding: EdgeInsets.symmetric(),
-                        value: isSwitched,
-                        onChanged: (bool value) {
-                          setState(() {
-                            isSwitched = !value;
-                          });
-                        })
-                    // CupertinoSwitch(
-                    //     value: _switchValue,
-                    //     onChanged: (value) {
-                    //       setState(() {
-                    //         _switchValue = !value;
-                    //         print("switch value : $_switchValue");
-                    //       });
-                    //     }),
-                  ],
-                ),
-              )));
-    }
-
-// Tab Setting
+  @override
+  Widget build(BuildContext context) {
+    final availableMeals = dummyMeals.where((meal) {
+      if (_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
+        return false;
+      }
+      if (_selectedFilters[Filter.lactoseFree]! && !meal.isLactoseFree) {
+        return false;
+      }
+      if (_selectedFilters[Filter.veganFree]! && !meal.isVegan) {
+        return false;
+      }
+      if (_selectedFilters[Filter.vegatarianFree]! && !meal.isVegetarian) {
+        return false;
+      }
+      return true;
+    }).toList();
 
     void _toggleFavouriteMealStatus(Meal meal) {
       final isExisting = _favouriteMeals.contains(meal);
@@ -97,6 +91,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
     Widget activePage = MainCategories(
       onToggleFavourite: _toggleFavouriteMealStatus,
+      availableMeals: availableMeals,
     );
     var activePageTitle = 'Pick your category';
 
@@ -129,68 +124,6 @@ class _TabsScreenState extends State<TabsScreen> {
             ),
           ],
         ),
-        endDrawer: Drawer(
-          surfaceTintColor: const Color.fromARGB(255, 163, 23, 13),
-          // transparent color background
-          //backgroundColor: Colors.deepOrangeAccent.withOpacity(0.5),
-          backgroundColor: const Color.fromARGB(255, 245, 147, 1),
-          elevation: 2.0,
-          width: 230,
-          clipBehavior: Clip.antiAlias,
-          shape: const BeveledRectangleBorder(
-              side: BorderSide(
-                  //width: 50,
-                  style: BorderStyle.solid,
-                  color: Color.fromARGB(255, 245, 147, 1),
-                  strokeAlign: BorderSide.strokeAlignOutside),
-              borderRadius: BorderRadius.horizontal(
-                left: Radius.elliptical(160, 200),
-              )),
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 30.0, top: 90, bottom: 10),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.fastfood_outlined,
-                    size: 50,
-                  ),
-                  title: Text(
-                    'Cook with me',
-                    style: TextStyle(color: Colors.black, fontSize: 25),
-                  ),
-                ),
-              ),
-              const Divider(
-                color: Colors.orangeAccent,
-              ),
-              const SizedBox(
-                height: 70,
-              ),
-              InkWell(
-                onTap: () {},
-                child: const ListTile(
-                  leading: Icon(Icons.food_bank),
-                  title: Text(
-                    'Favourite Meals',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  showFilterDialogBox();
-                },
-                child: const ListTile(
-                  leading: Icon(Icons.filter),
-                  title: Text(
-                    'Apply Filters',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ));
+        endDrawer: MyDrawer(onSelectScreen: _setScreen));
   }
 }
