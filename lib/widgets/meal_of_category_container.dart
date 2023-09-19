@@ -3,9 +3,11 @@ import 'package:meal_app/models/meal.dart';
 import 'package:meal_app/screen/meal_receipe.dart';
 
 class MealOfCategoryContainer extends StatelessWidget {
-  MealOfCategoryContainer({super.key, required this.meal});
+  MealOfCategoryContainer(
+      {super.key, required this.meal, required this.onSelectMeal});
 
   Meal meal;
+  void Function(Meal meal) onSelectMeal;
 
   String get complexityText {
     return meal.complexity.name[0].toUpperCase() +
@@ -21,11 +23,7 @@ class MealOfCategoryContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    MealReceipe(title: meal.title, id: meal.id)));
+        onSelectMeal(meal);
       },
       child: Container(
         margin: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),

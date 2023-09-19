@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:meal_app/screen/main_categories.dart';
 
+import 'package:meal_app/screen/tabs.dart';
+
+final theme = ThemeData(
+  useMaterial3: true,
+  colorScheme:
+      ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 163, 23, 13)),
+);
 void main() {
   runApp(const MyApp());
 }
@@ -12,12 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MainCategories(),
+      title: 'Meal App',
+      theme: theme,
+      home: const TabsScreen(),
     );
   }
 }

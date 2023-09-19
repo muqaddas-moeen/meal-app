@@ -1,6 +1,8 @@
 import 'package:meal_app/models/category.dart';
 import 'package:meal_app/models/meal.dart';
 
+var idFavMeal = [];
+
 var availableCategories = [
   Categoryy(
       id: 'c1',
