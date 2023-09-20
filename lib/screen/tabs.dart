@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meal_app/models/meal.dart';
+import 'package:meal_app/providers/favourite_meal_provider.dart';
 import 'package:meal_app/providers/meal_provider.dart';
 import 'package:meal_app/screen/main_categories.dart';
 import 'package:meal_app/data/dummy_data.dart';
@@ -25,7 +26,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
-  final List<Meal> _favouriteMeals = [];
   Map<Filter, bool> _selectedFilters = kInitialFilters;
 
   void _selectPage(int index) {
@@ -54,6 +54,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final meals = ref.watch(mealProvider);
+
     final availableMeals = meals.where((meal) {
       if (_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
         return false;
@@ -70,38 +71,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       return true;
     }).toList();
 
-    void _toggleFavouriteMealStatus(Meal meal) {
-      final isExisting = _favouriteMeals.contains(meal);
-
-      if (isExisting) {
-        setState(() {
-          _favouriteMeals.remove(meal);
-        });
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Removed your favourites')));
-        print(_favouriteMeals);
-      } else {
-        setState(() {
-          _favouriteMeals.add(meal);
-        });
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Added to your favourites')));
-        print(_favouriteMeals);
-      }
-    }
-
     Widget activePage = MainCategories(
-      onToggleFavourite: _toggleFavouriteMealStatus,
       availableMeals: availableMeals,
     );
     var activePageTitle = 'Pick your category';
 
     if (_selectedPageIndex == 1) {
+      final favouriteMeals = ref.watch(favouriteMealsProvider);
       activePage = MealsofCategory(
-        meals: _favouriteMeals,
-        onToggleFavourite: _toggleFavouriteMealStatus,
+        meals: favouriteMeals,
       );
       activePageTitle = 'Your Favorites';
     }
@@ -114,6 +92,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         ),
         body: activePage,
         bottomNavigationBar: BottomNavigationBar(
+          useLegacyColorScheme: true,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: const Color.fromARGB(255, 163, 23, 13),
+          selectedFontSize: 12,
+          unselectedItemColor: const Color.fromARGB(255, 134, 153, 163),
+          unselectedFontSize: 10,
+          unselectedLabelStyle:
+              const TextStyle(color: Color.fromARGB(255, 134, 153, 163)),
+          landscapeLayout: BottomNavigationBarLandscapeLayout.spread,
           onTap: _selectPage,
           currentIndex: _selectedPageIndex,
           items: const [

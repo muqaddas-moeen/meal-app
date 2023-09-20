@@ -30,11 +30,14 @@ class MealOfReceipe extends StatelessWidget {
                       const SizedBox(
                         width: 60,
                       ),
-                      CircleAvatar(
-                        minRadius: 70.0,
-                        maxRadius: 90.0,
-                        backgroundColor: Colors.deepPurple,
-                        backgroundImage: NetworkImage(meal.imageUrl),
+                      Hero(
+                        tag: meal.id,
+                        child: CircleAvatar(
+                          minRadius: 70.0,
+                          maxRadius: 90.0,
+                          backgroundColor: Colors.deepPurple,
+                          backgroundImage: NetworkImage(meal.imageUrl),
+                        ),
                       ),
                     ],
                   ),

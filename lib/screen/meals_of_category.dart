@@ -7,22 +7,20 @@ import 'package:meal_app/widgets/meal_of_category_container.dart';
 import 'package:meal_app/widgets/meal_of_receipe.dart';
 
 class MealsofCategory extends StatelessWidget {
-  MealsofCategory(
-      {super.key,
-      this.title,
-      required this.meals,
-      required this.onToggleFavourite});
+  MealsofCategory({
+    super.key,
+    this.title,
+    required this.meals,
+  });
 
   final String? title;
   final List<Meal> meals;
-  void Function(Meal meal) onToggleFavourite;
 
   void selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => MealReceipe(
           meal: meal,
-          onToggleFavourite: onToggleFavourite,
         ),
       ),
     );
